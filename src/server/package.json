@@ -4,17 +4,21 @@
   "private": true,
   "scripts": {
     "start": "npm run build && node dist/bin/www",
+    "dev": "nodemon --ignore 'dist/' -e js,html --exec \"npm run start\"",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json --copy-files"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "lodash": "^4.17.15",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "nodemon": "^2.0.2",
     "rimraf": "^3.0.2"
   }
 }
