@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { BaseResponse, ErrorInfo } from '../models';
 
-export default class BaseHttpService {
-  constructor(apiUrl, defaultTimeout) {
+export default class BaseHttpClient {
+  constructor(apiUrl, defaultTimeout, headers) {
     this.config = {
-      baseURL: this.apiUrl,
-      timeout: this.defaultTimeout,
+      baseURL: apiUrl,
+      timeout: defaultTimeout,
+      headers, 
     };
   }
 
@@ -14,16 +15,17 @@ export default class BaseHttpService {
   }
 
   async post(url, data) {
-    return axios.post(url, data, this.config).then(r => this.handleResponse(r));
+    return axios.post(url, data, this.config).then(this.handleResponse);
   }
 
   async put(url, data) {
-    return axios.put(url, data, this.config).then(r => this.handleResponse(r));
+    return axios.put(url, data, this.config).then(this.handleResponse);
   }
 
   async patch(url, data) {
-    return axios.patch(url, data, this.config).then(r => this.handleResponse(r));
+    return axios.patch(url, data, this.config).then(this.handleResponse);
   }
+
   async delete(url){
     return axios.delete(url, this.config).then(this.handleResponse);
   }
