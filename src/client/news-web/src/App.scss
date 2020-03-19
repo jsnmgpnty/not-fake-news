@@ -1,0 +1,17 @@
+@import './variables';
+
+#news-main {
+  display: flex;
+  flex-direction: column;
+
+  .news-content {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+  }
+
+  @include media(sm) {
+    flex-direction: row;
+    height: 100%;
+  }
+}

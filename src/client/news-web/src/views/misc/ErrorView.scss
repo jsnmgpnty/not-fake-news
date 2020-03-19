@@ -1,0 +1,16 @@
+@import '../../variables';
+
+#error-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .error-view--content {
+    text-align: center;
+    color: $white;
+
+    img {
+      width: 100%;
+    }
+  }
+}

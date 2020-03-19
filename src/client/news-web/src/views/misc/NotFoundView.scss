@@ -1,0 +1,16 @@
+@import '../../variables';
+
+#not-found-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .not-found-view--content {
+    text-align: center;
+    color: $white;
+
+    h1 {
+      font-size: 6rem;
+    }
+  }
+}

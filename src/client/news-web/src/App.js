@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, memo } from 'react';
+import { withRouter } from 'react-router-dom';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import Hidden from '@material-ui/core/Hidden';
+import { connect } from 'react-redux';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
-function App() {
+import { AppHeader, NavMenu, NavContent } from './components';
+import AppRoutes from './AppRoutes';
+import AppTheme from './AppTheme';
+import { toggleNavMenu } from './actions/headerMenu';
+
+import './App.scss';
+
+const App = memo((props) => {
+  const { location, toggleNavMenu } = props;
+
+  useEffect(() => {
+
+  }, []);
+
+  useEffect(() => {
+    if (toggleNavMenu) {
+      toggleNavMenu(false);
+    }
+    window.scrollTo(0, 0);
+  }, [toggleNavMenu, location.pathname]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CssBaseline>
+      <MuiThemeProvider theme={AppTheme}>
+        <div id="news-main">
+          <Hidden smDown implementation="css">
+            <NavContent />
+          </Hidden>
+          <div className="news-content">
+            <AppHeader />
+            <AppRoutes />
+          </div>
+          <Hidden mdUp implementation="css">
+            <NavMenu />
+          </Hidden>
+        </div>
+      </MuiThemeProvider>
+    </CssBaseline>
   );
-}
+});
 
-export default App;
+const mapStateToProps = state => ({
+  ...state.navigation,
+});
+
+const mapDispatchToProps = dispatch => ({
+  toggleNavMenu: (val) => dispatch(toggleNavMenu(val)),
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
