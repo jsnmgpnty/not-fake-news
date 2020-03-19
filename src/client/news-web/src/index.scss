@@ -6,24 +6,22 @@ html, body, .App, #root {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'Myriad, Helvetica Neue, Arial';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.5);
+  background: $gray-800;
 }
 
 body {
   font-family: 'Myriad', 'Helvetica Neue', 'Lucida Grande';
   font-size: $font-size-base !important;
-  color: $gray-200 !important;
+  color: $gray-100 !important;
 }
 
 a {
   text-decoration: none;
-  color: $gray-200;
+  color: $gray-100;
 
   @include active-element {
     text-decoration: none !important  ;

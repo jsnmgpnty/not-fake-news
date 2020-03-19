@@ -5,24 +5,24 @@ const AppTheme = createMuiTheme({
   typography: {
     useNextVariants: true,
     fontFamily: ['Myriad', 'Helvetica Neue', 'Lucida Console'],
+    fontSize: 14,
+    fontWeightLight: 100,
+    fontWeightMedium: 200,
+    fontWeightRegular: 200,
+    fontWeightBold: 200,
   },
   overrides: {
-    MuiAppBar: {
-      root: {
-        zIndex: 1000,
-      },
-    },
     MuiPickersToolbar: {
       toolbar: {
-        backgroundColor: themeColors.gray200,
+        backgroundColor: themeColors.red,
       },
     },
     MuiToolbar: {
       root: {
-        backgroundColor: themeColors.black,
+        backgroundColor: themeColors.red,
       },
       regular: {
-        backgroundColor: themeColors.black,
+        backgroundColor: themeColors.red,
       },
     },
     MuiInput: {
@@ -34,6 +34,13 @@ const AppTheme = createMuiTheme({
         '&:after': {
           borderBottom: `2px solid ${themeColors.green}`,
         },
+      },
+    },
+    MuiAppBar: {
+      root: {
+        zIndex: 1000,
+        backgroundColor: themeColors.white,
+        color: themeColors.gray200,
       },
     },
     MuiInputLabel: {

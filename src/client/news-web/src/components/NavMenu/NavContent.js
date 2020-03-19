@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiChevronRight } from 'react-icons/fi';
 
 import './NavContent.scss';
 import { Typography } from '@material-ui/core';
@@ -8,7 +7,6 @@ import { Typography } from '@material-ui/core';
 const NavContent = (props) => {
   const renderItem = (item) => (
     <Link key={item.id} className="nav-content--links-item" to={item.url}>
-      <FiChevronRight className="nav-content--links-item-icon" />
       <div className="nav-content--links-item-info">
         <Typography variant="body2">{item.name}</Typography>
         <Typography variant="caption">{item.description}</Typography>

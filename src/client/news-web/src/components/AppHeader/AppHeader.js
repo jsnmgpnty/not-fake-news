@@ -8,7 +8,7 @@ import { Typography } from '@material-ui/core';
 import { FiMenu } from 'react-icons/fi';
 
 import { toggleNavMenu } from '../../actions/headerMenu';
-
+import headerIcon from '../../assets/header-icon.png';
 import './AppHeader.scss';
 
 const mapStateToProps = state => ({
@@ -47,6 +47,7 @@ const AppHeader = (props) => {
           {renderMenuToggle()}
         </Hidden>
         <Typography className="app-header--brand" variant="h6">
+          <img src={headerIcon} />
           Not a Fake News Site
         </Typography>
       </Toolbar>
