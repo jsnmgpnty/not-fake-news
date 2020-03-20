@@ -1,8 +1,9 @@
-@import './variables';
+@import "./variables";
 
 #news-main {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 
   .news-content {
     display: flex;
@@ -11,6 +12,9 @@
 
     &--body {
       overflow: auto;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
     }
   }
 

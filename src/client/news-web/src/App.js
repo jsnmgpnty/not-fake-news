@@ -1,5 +1,4 @@
 import React, { useEffect, memo } from 'react';
-import { withRouter } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import { connect } from 'react-redux';
@@ -16,18 +15,19 @@ import { getSources } from './actions/news';
 import './App.scss';
 
 const App = memo((props) => {
-  const { location, toggleNavMenu } = props;
+  const { toggleNavMenu, getSources } = props;
 
+  // On component mount
   useEffect(() => {
-    props.getSources();
-  }, []);
+    getSources();
+  }, [getSources]);
 
   useEffect(() => {
     if (toggleNavMenu) {
       toggleNavMenu(false);
     }
     window.scrollTo(0, 0);
-  }, [toggleNavMenu, location.pathname]);
+  }, [toggleNavMenu]);
 
   const isOnline = (val) => {
     window.setTimeout(() => {
@@ -73,4 +73,4 @@ const mapDispatchToProps = dispatch => ({
   getSources: (category, country, language) => dispatch(getSources(category, country, language)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default connect(mapStateToProps, mapDispatchToProps)(App);

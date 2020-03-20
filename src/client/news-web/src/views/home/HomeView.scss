@@ -1,9 +1,30 @@
-@import '../../variables';
+@import "../../variables";
 
-#home-view {
-  padding: 1rem;
+.home-view {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 
-  @include media(sm) {
-    padding: 2rem;
+  &--alert {
+    width: 100%;
+  }
+
+  &--articles {
+    padding: 1rem;
+
+    @include media(sm) {
+      padding: 2rem;
+    }
+
+    &-list {
+      margin-bottom: 1rem !important;
+    }
+
+    &-pager {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
   }
 }

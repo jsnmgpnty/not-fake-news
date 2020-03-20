@@ -7,6 +7,7 @@ import {
   SET_ARTICLES,
   SET_TOTAL_ARTICLES,
   SET_CURRENT_ARTICLE_PAGE,
+  SET_CURRENT_SELECTED_SOURCE,
 } from '../actions/news';
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   isArticlesBusy: false,
   totalArticles: 0,
   currentArticlePage: 1,
+  currentSelectedSource: null,
 };
 
 const news = (state = initialState, action) => {
@@ -39,9 +41,11 @@ const news = (state = initialState, action) => {
     case SET_ARTICLES:
       return { ...state, articles: action.payload };
     case SET_TOTAL_ARTICLES:
-      return { ...state, totalArticles: action.payload };
+      return { ...state, totalArticles: parseInt(action.payload) };
     case SET_CURRENT_ARTICLE_PAGE:
-      return { ...state, currentArticlePage: action.payload };
+      return { ...state, currentArticlePage: parseInt(action.payload, 10) };
+    case SET_CURRENT_SELECTED_SOURCE:
+      return { ...state, currentSelectedSource: action.payload };
     default:
       return state;
   }

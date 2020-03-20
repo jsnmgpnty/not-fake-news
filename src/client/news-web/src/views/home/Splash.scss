@@ -1,0 +1,51 @@
+@import "../../variables";
+
+.splash {
+  height: 100%;
+  width: 100%;
+
+  &--img {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+
+    &-text {
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+
+      @include media (sm) {
+        padding: 3rem;
+      }
+
+      h2 {
+        text-transform: uppercase;
+        letter-spacing: 0;
+        font-weight: 300 !important;
+        margin-bottom: 2rem;
+      }
+
+      h6{ 
+        margin-bottom: 1rem;
+      }
+    }
+
+    &-bg {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(4px);
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+
+      @include leveled-box-shadow(true, 20, $black);
+    }
+  }
+}

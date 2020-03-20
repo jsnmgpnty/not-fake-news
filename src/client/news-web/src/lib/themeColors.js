@@ -10,7 +10,7 @@ const themeColors = {
   green: '#76c043',
   teal: '#20c997',
   cyan: '#17a2b8',
-  primaryColor: '#6610f2',
+  primaryColor: '#b82601',
   secondaryColor: '#813772',
 
   // grayscale colors

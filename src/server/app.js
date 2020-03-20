@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-NewsApiClient.init(process.env.NEWS_API_URL, 10000, { 'X-Api-Key': process.env.NEWS_API_KEY });
+NewsApiClient.init(process.env.NEWS_API_URL, 60000, { 'X-Api-Key': process.env.NEWS_API_KEY });
 
 // Routing setup
 // ===============================
@@ -45,7 +45,7 @@ app.use('/', indexRouter);
 app.use('/api/news', usersRouter);
 app.get('*', function (req, res) {
   res.status(404).json({
-    error: `Route with url ${req.url} does not exist`,
+    error: `notFound`,
   });
 });
 

@@ -35,9 +35,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-var getNewsResponse = function () {
+var handleErrorMessage = function handleErrorMessage(err) {
+  _Logger2.default.error(err);
+  var code = _.get(err, 'response.data.code', 'unexpectedError');
+  return code;
+};
+
+// Handles fetching of news articles
+var getNewsArticles = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url, genericErrorMessage, onSuccess, onError) {
-    var message, result;
+    var message, result, errorMessage;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -50,7 +57,7 @@ var getNewsResponse = function () {
             message = 'Invalid arguments passed!';
 
             _Logger2.default.error(message);
-            return _context.abrupt('return', { message: message });
+            return _context.abrupt('return', { error: 'parameterInvalid' });
 
           case 4:
             _context.prev = 4;
@@ -85,9 +92,8 @@ var getNewsResponse = function () {
           case 16:
             _context.prev = 16;
             _context.t0 = _context['catch'](4);
-
-            _Logger2.default.error('Response from ' + url + ' is invalid\r\n', _context.t0);
-            return _context.abrupt('return', onError(_context.t0 || genericErrorMessage));
+            errorMessage = handleErrorMessage(_context.t0);
+            return _context.abrupt('return', onError(errorMessage));
 
           case 20:
           case 'end':
@@ -97,7 +103,7 @@ var getNewsResponse = function () {
     }, _callee, undefined, [[4, 16]]);
   }));
 
-  return function getNewsResponse(_x, _x2, _x3, _x4) {
+  return function getNewsArticles(_x, _x2, _x3, _x4) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -113,6 +119,8 @@ var NewsService = function (_BaseService) {
 
   _createClass(NewsService, [{
     key: 'getEverything',
+
+    // Get all articles from news sources selected
     value: function () {
       var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(query, language, sources, pageSize, page) {
         var err, url;
@@ -125,7 +133,7 @@ var NewsService = function (_BaseService) {
                   break;
                 }
 
-                err = 'Please select a source or add a search term or we\'ll be sending a sh*t ton of articles';
+                err = 'parametersTooBroad';
                 return _context2.abrupt('return', this.getErrorResponse(err, err));
 
               case 3:
@@ -146,7 +154,7 @@ var NewsService = function (_BaseService) {
                 url = url.slice(0, -1);
 
                 _context2.next = 12;
-                return getNewsResponse(url, 'Failed to get articles', this.getSuccessResponse, this.getErrorResponse);
+                return getNewsArticles(url, 'unexpectedError', this.getSuccessResponse, this.getErrorResponse);
 
               case 12:
                 return _context2.abrupt('return', _context2.sent);
@@ -165,6 +173,9 @@ var NewsService = function (_BaseService) {
 
       return getEverything;
     }()
+
+    // Get only top headlines from news sources selected
+
   }, {
     key: 'getTopHeadlines',
     value: function () {
@@ -198,7 +209,7 @@ var NewsService = function (_BaseService) {
                 url = url.slice(0, -1);
 
                 _context3.next = 8;
-                return getNewsResponse(url, 'Failed to get articles', this.getSuccessResponse, this.getErrorResponse);
+                return getNewsArticles(url, 'unexpectedError', this.getSuccessResponse, this.getErrorResponse);
 
               case 8:
                 return _context3.abrupt('return', _context3.sent);
@@ -217,11 +228,14 @@ var NewsService = function (_BaseService) {
 
       return getTopHeadlines;
     }()
+
+    // Get news sources (abc-news, buzzfeed, etc.)
+
   }, {
     key: 'getSources',
     value: function () {
       var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(category, country, language) {
-        var url, result;
+        var url, result, errorMessage;
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -253,8 +267,8 @@ var NewsService = function (_BaseService) {
                   break;
                 }
 
-                _Logger2.default.error('Response from ' + url + ' is invalid');
-                return _context4.abrupt('return', this.getErrorResponse(genericErrorMessage));
+                _Logger2.default.error('Response from ' + url + ' is invalid', result);
+                return _context4.abrupt('return', this.getErrorResponse('unexpectedError'));
 
               case 11:
 
@@ -266,9 +280,10 @@ var NewsService = function (_BaseService) {
                 _context4.t0 = _context4['catch'](4);
 
                 _Logger2.default.error('Response from ' + url + ' is invalid', _context4.t0);
-                return _context4.abrupt('return', this.getErrorResponse(_context4.t0 || genericErrorMessage));
+                errorMessage = handleErrorMessage(_context4.t0);
+                return _context4.abrupt('return', this.getErrorResponse(errorMessage));
 
-              case 19:
+              case 20:
               case 'end':
                 return _context4.stop();
             }

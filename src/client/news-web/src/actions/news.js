@@ -1,5 +1,5 @@
 import NewsApi from '../services/NewsApi';
-import { extractErrorMessage } from '../lib/errorHandling';
+import { getErrorMessage } from '../lib/errorHandling';
 
 // Fetch news sources actions 
 export const GET_SOURCES_BUSY = 'GET_SOURCES_BUSY';
@@ -12,6 +12,14 @@ export const GET_ARTICLES_ERROR = 'GET_ARTICLES_ERROR';
 export const SET_ARTICLES = 'SET_ARTICLES';
 export const SET_TOTAL_ARTICLES = 'SET_TOTAL_ARTICLES';
 export const SET_CURRENT_ARTICLE_PAGE = 'SET_CURRENT_ARTICLE_PAGE';
+export const SET_CURRENT_SELECTED_SOURCE = 'SET_CURRENT_SELECTED_SOURCE';
+
+const setNewsArticleError = (dispatch, error) => {
+  dispatch({ type: SET_TOTAL_ARTICLES, payload: 0 });
+  dispatch({ type: SET_CURRENT_ARTICLE_PAGE, payload: 1 });
+  dispatch({ type: GET_ARTICLES_ERROR, payload: error });
+  dispatch({ type: GET_ARTICLES_BUSY, payload: false });
+}
 
 const getSources = (category, country, language) => {
   return async (dispatch) => {
@@ -24,14 +32,13 @@ const getSources = (category, country, language) => {
         dispatch({ type: SET_SOURCES, payload: result.data });
         dispatch({ type: GET_SOURCES_ERROR, payload: null });
       } else {
-        dispatch({ type: GET_SOURCES_ERROR, payload: result.error || 'Failed to load sources.' });
+        dispatch({ type: GET_SOURCES_ERROR, payload: getErrorMessage(result.error) });
       }
 
       dispatch({ type: GET_SOURCES_BUSY, payload: false });
     } catch (error) {
-      const errorMessage = extractErrorMessage(error) || 'Failed to load sources';
       dispatch({ type: GET_SOURCES_BUSY, payload: false });
-      dispatch({ type: GET_SOURCES_ERROR, payload: errorMessage });
+      dispatch({ type: GET_SOURCES_ERROR, payload: getErrorMessage(error.error) });
     }
   };
 }
@@ -39,6 +46,8 @@ const getSources = (category, country, language) => {
 const getArticles = (query, language, sources, pageSize, page) => {
   return async (dispatch) => {
     dispatch({ type: GET_ARTICLES_BUSY, payload: true });
+    dispatch({ type: SET_CURRENT_ARTICLE_PAGE, payload: page });
+    dispatch({ type: SET_CURRENT_SELECTED_SOURCE, payload: sources });
 
     try {
       const result = await NewsApi.getArticles(query, language, sources, pageSize, page);
@@ -47,25 +56,23 @@ const getArticles = (query, language, sources, pageSize, page) => {
         dispatch({ type: SET_ARTICLES, payload: result.data.articles });
         dispatch({ type: SET_TOTAL_ARTICLES, payload: result.data.totalResults });
         dispatch({ type: GET_ARTICLES_ERROR, payload: null });
+        dispatch({ type: GET_ARTICLES_BUSY, payload: false });
       } else {
-        dispatch({ type: GET_ARTICLES_ERROR, payload: result.error || 'Failed to load articles.' });
-        dispatch({ type: SET_TOTAL_ARTICLES, payload: 0 });
+        setNewsArticleError(dispatch, getErrorMessage(result.error));
       }
-
-      dispatch({ type: GET_ARTICLES_BUSY, payload: false });
     } catch (error) {
-      const errorMessage = extractErrorMessage(error) || 'Failed to load articles';
-      dispatch({ type: GET_ARTICLES_BUSY, payload: false });
-      dispatch({ type: GET_ARTICLES_ERROR, payload: errorMessage });
-      dispatch({ type: SET_TOTAL_ARTICLES, payload: 0 });
+      setNewsArticleError(dispatch, getErrorMessage(error.error));
     }
   };
 }
 
 const setCurrentArticlePage = (payload) => ({ type: SET_CURRENT_ARTICLE_PAGE, payload });
 
+const setCurrentSelectedSource = (payload) => ({ type: SET_CURRENT_SELECTED_SOURCE, payload });
+
 export {
   getSources,
   getArticles,
   setCurrentArticlePage,
+  setCurrentSelectedSource,
 }

@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import ApiClient from './ApiClient';
-import * as _ from 'lodash';
+import { DEFAULT_PAGE_SIZE } from '../lib/defaults';
 
 const baseApiUrl = _.get(window, 'appConfig.apiUrl', 'http://localhost:3100/');
 
@@ -19,7 +20,7 @@ class NewsApi extends ApiClient {
       url = `${url}sources=${sources}&`;
     }
 
-    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 12)}&`;
+    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : DEFAULT_PAGE_SIZE)}&`;
     url = `${url}page=${(!_.isNil(page) ? page : 1)}&`;
     url = `${url}language=${(!_.isNil(language) ? language : 'en')}&`;
     url = url.slice(0, -1);
@@ -46,7 +47,7 @@ class NewsApi extends ApiClient {
       }
     }
 
-    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 12)}&`;
+    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : DEFAULT_PAGE_SIZE)}&`;
     url = `${url}page=${(!_.isNil(page) ? page : 1)}&`;
     url = url.slice(0, -1);
 

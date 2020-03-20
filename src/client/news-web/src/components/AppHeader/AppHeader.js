@@ -10,6 +10,7 @@ import { FiMenu } from 'react-icons/fi';
 import { toggleNavMenu } from '../../actions/headerMenu';
 import headerIcon from '../../assets/header-icon.png';
 import './AppHeader.scss';
+import { Link } from 'react-router-dom';
 
 const mapStateToProps = state => ({
   ...state.headerMenu,
@@ -48,7 +49,7 @@ const AppHeader = (props) => {
         </Hidden>
         <Typography className="app-header--brand" variant="h6">
           <img src={headerIcon} alt="" />
-          Not a Fake News Site
+          <Link to="/">NFNS</Link>
         </Typography>
       </Toolbar>
     </AppBar>

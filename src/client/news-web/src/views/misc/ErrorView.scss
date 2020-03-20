@@ -4,6 +4,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 4rem 1rem;
+
+  @include media(sm) {
+    padding: 6rem;
+  }
 
   .error-view--content {
     text-align: center;

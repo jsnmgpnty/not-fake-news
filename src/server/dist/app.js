@@ -70,7 +70,7 @@ app.use(_express2.default.urlencoded({ extended: false }));
 app.use((0, _cookieParser2.default)());
 app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
 
-_NewsApiClient2.default.init(process.env.NEWS_API_URL, 10000, { 'X-Api-Key': process.env.NEWS_API_KEY });
+_NewsApiClient2.default.init(process.env.NEWS_API_URL, 60000, { 'X-Api-Key': process.env.NEWS_API_KEY });
 
 // Routing setup
 // ===============================
@@ -78,7 +78,7 @@ app.use('/', _index2.default);
 app.use('/api/news', _news2.default);
 app.get('*', function (req, res) {
   res.status(404).json({
-    error: 'Route with url ' + req.url + ' does not exist'
+    error: 'notFound'
   });
 });
 
