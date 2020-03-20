@@ -9,7 +9,7 @@ class NewsApi extends ApiClient {
   }
 
   async getArticles(query, language, sources, pageSize, page) {
-    let url = '/everything?';
+    let url = '/news?';
 
     if (!_.isNil(query)) {
       url = `${url}q=${query}&`;
@@ -19,7 +19,7 @@ class NewsApi extends ApiClient {
       url = `${url}sources=${sources}&`;
     }
 
-    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 20)}&`;
+    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 12)}&`;
     url = `${url}page=${(!_.isNil(page) ? page : 1)}&`;
     url = `${url}language=${(!_.isNil(language) ? language : 'en')}&`;
     url = url.slice(0, -1);
@@ -28,7 +28,7 @@ class NewsApi extends ApiClient {
   }
 
   async getTopHeadlines(query, country, category, sources, pageSize, page) {
-    let url = '/top-headlines?';
+    let url = '/news/top-headlines?';
 
     if (!_.isNil(query)) {
       url = `${url}q=${query}&`;
@@ -46,7 +46,7 @@ class NewsApi extends ApiClient {
       }
     }
 
-    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 20)}&`;
+    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 12)}&`;
     url = `${url}page=${(!_.isNil(page) ? page : 1)}&`;
     url = url.slice(0, -1);
 
@@ -54,7 +54,7 @@ class NewsApi extends ApiClient {
   }
 
   async getSources(category, country, language) {
-    let url = '/sources?';
+    let url = '/news/sources?';
 
     if (!_.isNil(country)) {
       url = `${url}country=${country}&`;

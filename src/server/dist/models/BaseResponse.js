@@ -12,10 +12,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var BaseResponse = function BaseResponse(message, error, data) {
+var BaseResponse = function BaseResponse(error, data) {
   _classCallCheck(this, BaseResponse);
-
-  this.message = message;
 
   if (!_.isNil(error)) {
     this.error = error;

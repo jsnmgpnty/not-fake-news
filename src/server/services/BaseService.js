@@ -3,12 +3,12 @@ import Logger from '../utils/Logger';
 import BaseResponse from '../models/BaseResponse';
 
 export default class BaseService {
-  getErrorResponse(message, err) {
+  getErrorResponse(err) {
     Logger.error(err);
-    return new BaseResponse(message, err);
+    return new BaseResponse(err);
   }
 
-  getSuccessResponse(message, data) {
-    return new BaseResponse(message, null, data);
+  getSuccessResponse(data) {
+    return new BaseResponse(null, data);
   }
 }

@@ -17,11 +17,12 @@ import NewsApiClient from './utils/NewsApiClient';
 const whitelist = ['http://localhost:3000'];
 const corsOptions = {
   origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
     if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
+      return callback(null, true);
     }
+    return callback(new Error('Not allowed by CORS'));
   }
 }
 
@@ -42,10 +43,9 @@ NewsApiClient.init(process.env.NEWS_API_URL, 10000, { 'X-Api-Key': process.env.N
 // ===============================
 app.use('/', indexRouter);
 app.use('/api/news', usersRouter);
-app.get('*', function(req, res){
+app.get('*', function (req, res) {
   res.status(404).json({
-    message: 'Route does not exist',
-    error: `Request with ${req.url} cannot be handled`,
+    error: `Route with url ${req.url} does not exist`,
   });
 });
 

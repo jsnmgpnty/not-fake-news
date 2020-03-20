@@ -47,7 +47,7 @@ const AppHeader = (props) => {
           {renderMenuToggle()}
         </Hidden>
         <Typography className="app-header--brand" variant="h6">
-          <img src={headerIcon} />
+          <img src={headerIcon} alt="" />
           Not a Fake News Site
         </Typography>
       </Toolbar>

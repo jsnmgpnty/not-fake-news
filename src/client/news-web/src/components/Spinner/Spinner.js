@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'react-loader-advanced';
 import { BounceLoader } from 'react-spinners';
-
-import FlameSpinner from './FlameSpinner';
 import './Spinner.scss';
 
 const propTypes = {
@@ -13,7 +11,7 @@ const propTypes = {
   blur: PropTypes.number,
   color: PropTypes.string,
   className: PropTypes.string,
-  spinnerType: PropTypes.oneOf(['bounce', 'flame'])
+  spinnerType: PropTypes.oneOf(['bounce'])
 };
 
 const defaultProps = {
@@ -35,12 +33,7 @@ const showContent = (props) => {
 }
 
 const getMessage = (props) => {
-  switch (props.spinnerType) {
-    case 'flame':
-      return <FlameSpinner />;
-    default:
-      return  <BounceLoader loading={props.isLoading} color={props.color} />;
-  }
+  return  <BounceLoader loading={props.isLoading} color={props.color} />;
 }
 
 function Spinner(props) {
@@ -64,4 +57,4 @@ function Spinner(props) {
 Spinner.propTypes = propTypes;
 Spinner.defaultProps = defaultProps;
 
-export default Spinner
+export default Spinner;

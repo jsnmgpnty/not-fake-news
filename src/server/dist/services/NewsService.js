@@ -66,28 +66,35 @@ var getNewsResponse = function () {
             }
 
             _Logger2.default.error('Response from ' + url + ' is invalid');
-            return _context.abrupt('return', undefined.getErrorResponse(genericErrorMessage, genericErrorMessage));
+            return _context.abrupt('return', undefined.getErrorResponse(genericErrorMessage));
 
           case 11:
+
+            // Set to actual null value instead of null for url images 
+            result.articles.forEach(function (a) {
+              if (a.urlToImage === 'null') {
+                a.urlToImage = null;
+              }
+            });
 
             if (result.hasOwnProperty('status')) {
               delete result.status;
             }
-            return _context.abrupt('return', onSuccess(null, result));
+            return _context.abrupt('return', onSuccess(result));
 
-          case 15:
-            _context.prev = 15;
+          case 16:
+            _context.prev = 16;
             _context.t0 = _context['catch'](4);
 
             _Logger2.default.error('Response from ' + url + ' is invalid\r\n', _context.t0);
-            return _context.abrupt('return', onError(genericErrorMessage, _context.t0));
+            return _context.abrupt('return', onError(_context.t0 || genericErrorMessage));
 
-          case 19:
+          case 20:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, undefined, [[4, 15]]);
+    }, _callee, undefined, [[4, 16]]);
   }));
 
   return function getNewsResponse(_x, _x2, _x3, _x4) {
@@ -133,7 +140,7 @@ var NewsService = function (_BaseService) {
                   url = url + 'sources=' + sources + '&';
                 }
 
-                url = url + 'pageSize=' + (!_.isNil(pageSize) ? pageSize : 20) + '&';
+                url = url + 'pageSize=' + (!_.isNil(pageSize) ? pageSize : 12) + '&';
                 url = url + 'page=' + (!_.isNil(page) ? page : 1) + '&';
                 url = url + 'language=' + (!_.isNil(language) ? language : 'en') + '&';
                 url = url.slice(0, -1);
@@ -186,7 +193,7 @@ var NewsService = function (_BaseService) {
                   }
                 }
 
-                url = url + 'pageSize=' + (!_.isNil(pageSize) ? pageSize : 20) + '&';
+                url = url + 'pageSize=' + (!_.isNil(pageSize) ? pageSize : 12) + '&';
                 url = url + 'page=' + (!_.isNil(page) ? page : 1) + '&';
                 url = url.slice(0, -1);
 
@@ -247,19 +254,19 @@ var NewsService = function (_BaseService) {
                 }
 
                 _Logger2.default.error('Response from ' + url + ' is invalid');
-                return _context4.abrupt('return', this.getErrorResponse(genericErrorMessage, genericErrorMessage));
+                return _context4.abrupt('return', this.getErrorResponse(genericErrorMessage));
 
               case 11:
 
                 delete result.status;
-                return _context4.abrupt('return', this.getSuccessResponse(null, result.sources));
+                return _context4.abrupt('return', this.getSuccessResponse(result.sources));
 
               case 15:
                 _context4.prev = 15;
                 _context4.t0 = _context4['catch'](4);
 
                 _Logger2.default.error('Response from ' + url + ' is invalid', _context4.t0);
-                return _context4.abrupt('return', this.getErrorResponse(genericErrorMessage, _context4.t0));
+                return _context4.abrupt('return', this.getErrorResponse(_context4.t0 || genericErrorMessage));
 
               case 19:
               case 'end':

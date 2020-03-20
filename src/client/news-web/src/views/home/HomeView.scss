@@ -1,0 +1,9 @@
+@import '../../variables';
+
+#home-view {
+  padding: 1rem;
+
+  @include media(sm) {
+    padding: 2rem;
+  }
+}

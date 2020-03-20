@@ -4,6 +4,10 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
+var _cors = require('cors');
+
+var _cors2 = _interopRequireDefault(_cors);
+
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -42,9 +46,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _dotenv2.default.config();
 
-var app = (0, _express2.default)();
+// Cors config
+// ===============================
+var whitelist = ['http://localhost:3000'];
+var corsOptions = {
+  origin: function origin(_origin, callback) {
+    if (!_origin) return callback(null, true);
+
+    if (whitelist.indexOf(_origin) !== -1) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  }
+
+  // Server setup
+  // ===============================
+};var app = (0, _express2.default)();
 app.use(_ErrorHandler2.default);
 app.use((0, _morgan2.default)('dev'));
+app.use((0, _cors2.default)(corsOptions));
 app.use(_express2.default.json());
 app.use(_express2.default.urlencoded({ extended: false }));
 app.use((0, _cookieParser2.default)());
@@ -52,12 +72,13 @@ app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
 
 _NewsApiClient2.default.init(process.env.NEWS_API_URL, 10000, { 'X-Api-Key': process.env.NEWS_API_KEY });
 
+// Routing setup
+// ===============================
 app.use('/', _index2.default);
 app.use('/api/news', _news2.default);
 app.get('*', function (req, res) {
   res.status(404).json({
-    message: 'Route does not exist',
-    error: 'Request with ' + req.url + ' cannot be handled'
+    error: 'Route with url ' + req.url + ' does not exist'
   });
 });
 

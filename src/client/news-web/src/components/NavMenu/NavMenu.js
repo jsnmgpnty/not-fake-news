@@ -6,14 +6,6 @@ import { toggleNavMenu } from '../../actions/headerMenu';
 import NavContent from './NavContent';
 import './NavMenu.scss';
 
-const mapStateToProps = state => ({
-  ...state.headerMenu,
-});
-
-const mapDispatchToProps = dispatch => ({
-  toggleNavMenu: (val) => dispatch(toggleNavMenu(val)),
-});
-
 const NavMenu = (props) => {
   const onStateChange = (newState) => (event) => {
     const { toggleNavMenu } = props;
@@ -38,5 +30,13 @@ const NavMenu = (props) => {
     </SwipeableDrawer>
   )
 };
+
+const mapStateToProps = state => ({
+  ...state.headerMenu,
+});
+
+const mapDispatchToProps = dispatch => ({
+  toggleNavMenu: (val) => dispatch(toggleNavMenu(val)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavMenu);

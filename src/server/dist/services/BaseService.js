@@ -31,14 +31,14 @@ var BaseService = function () {
 
   _createClass(BaseService, [{
     key: 'getErrorResponse',
-    value: function getErrorResponse(message, err) {
+    value: function getErrorResponse(err) {
       _Logger2.default.error(err);
-      return new _BaseResponse2.default(message, err);
+      return new _BaseResponse2.default(err);
     }
   }, {
     key: 'getSuccessResponse',
-    value: function getSuccessResponse(message, data) {
-      return new _BaseResponse2.default(message, null, data);
+    value: function getSuccessResponse(data) {
+      return new _BaseResponse2.default(null, data);
     }
   }]);
 

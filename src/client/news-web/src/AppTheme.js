@@ -120,7 +120,7 @@ const AppTheme = createMuiTheme({
     },
     MuiPaper: {
       root: {
-        backgroundColor: themeColors.gray800,
+        backgroundColor: themeColors.gray700,
       },
     },
     MuiIconButton: {

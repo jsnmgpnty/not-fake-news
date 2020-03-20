@@ -14,16 +14,23 @@ const getNewsResponse = async (url, genericErrorMessage, onSuccess, onError) => 
     const result = await NewsApiClient.getInstance().get(url);
     if (!result || !result.articles || (result.status && result.status.toLowerCase() !== 'ok')) {
       Logger.error(`Response from ${url} is invalid`);
-      return this.getErrorResponse(genericErrorMessage, genericErrorMessage);
+      return this.getErrorResponse(genericErrorMessage);
     }
+
+    // Set to actual null value instead of null for url images 
+    result.articles.forEach(a => {
+      if (a.urlToImage === 'null') {
+        a.urlToImage = null;
+      }
+    });
 
     if (result.hasOwnProperty('status')) {
       delete result.status;
     }
-    return onSuccess(null, result);
+    return onSuccess(result);
   } catch (error) {
     Logger.error(`Response from ${url} is invalid\r\n`, error);
-    return onError(genericErrorMessage, error);
+    return onError(error || genericErrorMessage);
   }
 }
 
@@ -44,7 +51,7 @@ class NewsService extends BaseService {
       url = `${url}sources=${sources}&`;
     }
 
-    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 20)}&`;
+    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 12)}&`;
     url = `${url}page=${(!_.isNil(page) ? page : 1)}&`;
     url = `${url}language=${(!_.isNil(language) ? language : 'en')}&`;
     url = url.slice(0, -1);
@@ -71,7 +78,7 @@ class NewsService extends BaseService {
       }
     }
 
-    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 20)}&`;
+    url = `${url}pageSize=${(!_.isNil(pageSize) ? pageSize : 12)}&`;
     url = `${url}page=${(!_.isNil(page) ? page : 1)}&`;
     url = url.slice(0, -1);
 
@@ -97,14 +104,14 @@ class NewsService extends BaseService {
       const result = await NewsApiClient.getInstance().get(url);
       if (!result || !result.sources || result.status.toLowerCase() !== 'ok') {
         Logger.error(`Response from ${url} is invalid`);
-        return this.getErrorResponse(genericErrorMessage, genericErrorMessage);
+        return this.getErrorResponse(genericErrorMessage);
       }
 
       delete result.status;
-      return this.getSuccessResponse(null, result.sources);
+      return this.getSuccessResponse(result.sources);
     } catch (error) {
       Logger.error(`Response from ${url} is invalid`, error);
-      return this.getErrorResponse(genericErrorMessage, error);
+      return this.getErrorResponse(error || genericErrorMessage);
     }
   }
 }
