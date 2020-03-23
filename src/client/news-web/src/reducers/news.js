@@ -20,6 +20,7 @@ const initialState = {
   totalArticles: 0,
   currentArticlePage: 1,
   currentSelectedSource: null,
+  cachedArticles: [],
 };
 
 const news = (state = initialState, action) => {

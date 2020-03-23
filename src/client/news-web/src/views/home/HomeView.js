@@ -24,6 +24,7 @@ const HomeView = memo((props) => {
     totalArticles,
     currentArticlePage,
     currentSelectedSource,
+    isSessionOnline,
   } = props;
   const location = useLocation();
 
@@ -40,10 +41,14 @@ const HomeView = memo((props) => {
       params.page = 1;
     }
 
+    if (_.isNil(isSessionOnline)) {
+      return;
+    }
+
+    getArticles(params.query, params.language, params.source, params.pageSize, params.page, isSessionOnline);
     setCurrentSelectedSource(params && params.source ? params.source : null);
-    getArticles(params.query, params.language, params.source, params.pageSize, params.page);
     scrollToTop();
-  }, [location.search, currentSelectedSource, getArticles, setCurrentSelectedSource])
+  }, [location.search, getArticles, setCurrentSelectedSource, isSessionOnline])
 
   // Scrolls to top of page
   const scrollToTop = () => {
@@ -54,12 +59,14 @@ const HomeView = memo((props) => {
   }
 
   // Renders article fetching errors
-  const renderErrorMessage = (error) => (
-    <Alert severity="warning" className="home-view--alert">
-      <AlertTitle>Whoops!</AlertTitle>
-      {error}
-    </Alert>
-  );
+  const renderErrorMessage = (error) => {
+    return (
+      <Alert severity="warning" className="home-view--alert">
+        <AlertTitle>Whoops!</AlertTitle>
+        {error}
+      </Alert>
+    );
+  }
 
   // Handles page selection event
   const onPageChanged = (ev, value) => {
@@ -124,10 +131,23 @@ const HomeView = memo((props) => {
     );
   }
 
+  // Renders session offline message
+  const renderOfflineMessage = () => {
+    return (
+      <Alert severity="info" className="home-view--alert">
+        <AlertTitle>Offline</AlertTitle>
+        You are currently viewing an offline copy of the articles.
+      </Alert>
+    );
+  }
+
   return (
     <div id="home-view" className="home-view" ref={refHomeView}>
       {
         isArticlesBusy && renderSkeleton()
+      }
+      {
+        !isSessionOnline && renderOfflineMessage()
       }
       {
         !isArticlesBusy && !_.isNil(currentSelectedSource) && (
@@ -147,12 +167,13 @@ const HomeView = memo((props) => {
 
 const mapStateToProps = state => ({
   ...state.news,
+  isSessionOnline: _.get(state, 'session.isOnline', true),
 });
 
 const mapDispatchToProps = dispatch => ({
   setCurrentSelectedSource: (source) => dispatch(setCurrentSelectedSource(source)),
-  getArticles: (query, language, sources, pageSize, page) =>
-    dispatch(getArticles(query, language, sources, pageSize, page)),
+  getArticles: (query, language, sources, pageSize, page, isOnline) =>
+    dispatch(getArticles(query, language, sources, pageSize, page, isOnline)),
   goToPage: (source, page) => dispatch(push(`/?source=${source}&page=${page}`)),
 });
 

@@ -1,3 +1,4 @@
+import { reactLocalStorage } from 'reactjs-localstorage';
 import NewsApi from '../services/NewsApi';
 import { getErrorMessage } from '../lib/errorHandling';
 
@@ -13,6 +14,7 @@ export const SET_ARTICLES = 'SET_ARTICLES';
 export const SET_TOTAL_ARTICLES = 'SET_TOTAL_ARTICLES';
 export const SET_CURRENT_ARTICLE_PAGE = 'SET_CURRENT_ARTICLE_PAGE';
 export const SET_CURRENT_SELECTED_SOURCE = 'SET_CURRENT_SELECTED_SOURCE';
+export const SET_CACHED_ARTICLES = 'SET_CACHED_ARTICLES';
 
 const setNewsArticleError = (dispatch, error) => {
   dispatch({ type: SET_TOTAL_ARTICLES, payload: 0 });
@@ -43,11 +45,30 @@ const getSources = (category, country, language) => {
   };
 }
 
-const getArticles = (query, language, sources, pageSize, page) => {
+const getArticles = (query, language, sources, pageSize, page, isOnline) => {
   return async (dispatch) => {
     dispatch({ type: GET_ARTICLES_BUSY, payload: true });
     dispatch({ type: SET_CURRENT_ARTICLE_PAGE, payload: page });
     dispatch({ type: SET_CURRENT_SELECTED_SOURCE, payload: sources });
+
+    if (!isOnline) {
+      const cachedArticles = reactLocalStorage.get(`articles-${page}`);
+      if (!cachedArticles) {
+        dispatch({ type: GET_ARTICLES_BUSY, payload: false });
+        return;
+      }
+
+      const articleList = JSON.parse(cachedArticles);
+      const cachedTotalNum = reactLocalStorage.get('articles-total');
+
+      if (articleList && articleList.length) {
+        dispatch({ type: SET_ARTICLES, payload: articleList });
+        dispatch({ type: SET_TOTAL_ARTICLES, payload: parseInt(cachedTotalNum, 10) });
+      }
+
+      dispatch({ type: GET_ARTICLES_BUSY, payload: false });
+      return;
+    }
 
     try {
       const result = await NewsApi.getArticles(query, language, sources, pageSize, page);
@@ -57,6 +78,8 @@ const getArticles = (query, language, sources, pageSize, page) => {
         dispatch({ type: SET_TOTAL_ARTICLES, payload: result.data.totalResults });
         dispatch({ type: GET_ARTICLES_ERROR, payload: null });
         dispatch({ type: GET_ARTICLES_BUSY, payload: false });
+        reactLocalStorage.set('articles-total', result.data.totalResults);
+        reactLocalStorage.set(`articles-${page}`, JSON.stringify(result.data.articles));
       } else {
         setNewsArticleError(dispatch, getErrorMessage(result.error));
       }

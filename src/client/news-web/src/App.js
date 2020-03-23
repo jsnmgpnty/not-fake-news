@@ -4,6 +4,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Detector } from "react-detect-offline";
+import _ from 'lodash';
 
 import { AppHeader, NavMenu, NavContent } from './components';
 import AppRoutes from './AppRoutes';
@@ -15,12 +16,16 @@ import { getSources } from './actions/news';
 import './App.scss';
 
 const App = memo((props) => {
-  const { toggleNavMenu, getSources } = props;
+  const { toggleNavMenu, getSources, isSessionOnline } = props;
 
   // On component mount
   useEffect(() => {
+    if (_.isNil(isSessionOnline)) {
+      return;
+    }
+
     getSources();
-  }, [getSources]);
+  }, [getSources, isSessionOnline]);
 
   useEffect(() => {
     if (toggleNavMenu) {
@@ -65,6 +70,7 @@ const App = memo((props) => {
 
 const mapStateToProps = state => ({
   ...state.navigation,
+  isSessionOnline: _.get(state, 'session.isOnline', null),
 });
 
 const mapDispatchToProps = dispatch => ({

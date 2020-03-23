@@ -4,11 +4,13 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  overflow: auto;
 
   .news-content {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
+    overflow: auto;
 
     &--body {
       overflow: auto;

@@ -12,6 +12,7 @@
 
   &--articles {
     padding: 1rem;
+    overflow: auto;
 
     @include media(sm) {
       padding: 2rem;
